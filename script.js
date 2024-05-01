@@ -1,6 +1,7 @@
 const { Client } = require('pg');
 
-let client; 
+// Este script por lo pronto no hace nada, pero no lo voy a borrar aún.
+let client;
 
 const conectar = async () => {
     if (!client) {
@@ -29,7 +30,7 @@ const ejecutarConsulta = async (consulta) => {
         return res.rows; // retorna el resultado 
     } catch (error) {
         console.error('Error :', error);
-        throw error; 
+        throw error;
     }
 };
 
