@@ -9,9 +9,10 @@ app.use(cors()); // Habilitar CORS para todas las rutas
 // Conexión a la base de datos desactivada para evitar tiempo de computación innecesario
 
 
-/* const pool = new Pool({
+const pool = new Pool({
     connectionString: "postgres://default:cZVGF62eRQsa@ep-floral-dream-a4cqkv4k-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require",
-}) */
+})
+
 
 
 /* app.get('/', async (req, res) => {
@@ -33,4 +34,27 @@ app.post('/admin', async (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`----> Backend iniciado en http://localhost:${PORT}`);
+});
+
+const validarEmpleado = async (id, pass) => {
+    const resultado = (await pool.query('SELECT * FROM public."EMPLEADO";'));
+
+    for (let i = 0; i < resultado.rowCount; i++) {
+        if (resultado.rows[i].ID == id) {
+            console.log('Usuario encontrado');
+            if (resultado.rows[i].Contrasenia == pass) {
+                console.log('Contraseña correcta');
+                return [true, true];
+            } else {
+                console.log('Contraseña incorrecta');
+                return [true, false];
+            }
+        }
+    }
+    console.log('Usuario no encontrado');
+    return [false, false];
+};
+
+validarEmpleado(1232, 'Juanes1223').then((res) => {
+    console.log(res);
 });
