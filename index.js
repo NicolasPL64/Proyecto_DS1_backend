@@ -5,6 +5,7 @@ const app = express();
 const PORT = process.env.PORT || 3000; // En caso de que no se haya definido el puerto (por si hosteamos en Vercel o algo), se usa el 3000
 
 app.use(cors()); // Habilitar CORS para todas las rutas
+app.use(express.json()); // Habilitar el uso de JSON en las peticiones
 
 // Conexión a la base de datos desactivada para evitar tiempo de computación innecesario
 
@@ -26,35 +27,42 @@ const pool = new Pool({
     }
 }); */
 
-
 app.post('/admin', async (req, res) => {
-    console.log('Admin123');
-    res.json({ success: true });
+    try {
+        const { id, pass } = req.body;
+        const validacion = await validarEmpleado(id, pass);
+
+        res.status(validacion.codigoEstado)
+            .json({ existe: validacion.existeUsuario, correcto: validacion.passCorrecto });
+    } catch (error) {
+        throw error;
+    }
 });
 
 app.listen(PORT, () => {
-    console.log(`----> Backend iniciado en http://localhost:${PORT}`);
+    console.log(`--------> Backend escuchando en http://localhost:${PORT} <--------`);
 });
 
 const validarEmpleado = async (id, pass) => {
-    const resultado = (await pool.query('SELECT * FROM public."EMPLEADO";'));
+    try {
+        const resultado = await pool.query('SELECT * FROM public."EMPLEADO" WHERE "ID" = $1', [id]);
 
-    for (let i = 0; i < resultado.rowCount; i++) {
-        if (resultado.rows[i].ID == id) {
-            console.log('Usuario encontrado');
-            if (resultado.rows[i].Contrasenia == pass) {
+        if (resultado.rowCount > 0) {
+            const empleado = resultado.rows[0];
+
+            if (empleado.Contrasenia === pass) {
                 console.log('Contraseña correcta');
-                return [true, true];
+                return { existeUsuario: true, passCorrecto: true, codigoEstado: 200 };
             } else {
                 console.log('Contraseña incorrecta');
-                return [true, false];
+                return { existeUsuario: true, passCorrecto: false, codigoEstado: 401 };
             }
+        } else {
+            console.log('Usuario no encontrado');
+            return { existeUsuario: false, passCorrecto: false, codigoEstado: 401 };
         }
+    } catch (error) {
+        console.error('Error al consultar la base de datos: ', error);
+        throw error;
     }
-    console.log('Usuario no encontrado');
-    return [false, false];
 };
-
-validarEmpleado(1232, 'Juanes1223').then((res) => {
-    console.log(res);
-});

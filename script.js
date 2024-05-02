@@ -1,6 +1,7 @@
+// Este script por lo pronto no hace nada, pero no lo voy a borrar aún.
+
 const { Client } = require('pg');
 
-// Este script por lo pronto no hace nada, pero no lo voy a borrar aún.
 let client;
 
 const conectar = async () => {
