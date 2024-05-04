@@ -1,7 +1,7 @@
-POST http://localhost:3000/admin HTTP/1.1
+POST http://localhost:3000/api/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "id": 123,
-    "pass": "Juanes123"
+    "id": 1323,
+    "pass": "Juanes1233"
 }

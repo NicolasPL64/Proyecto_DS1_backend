@@ -9,7 +9,6 @@ app.use(express.json()); // Habilitar el uso de JSON en las peticiones
 
 // Conexión a la base de datos desactivada para evitar tiempo de computación innecesario
 
-
 const pool = new Pool({
     connectionString: "postgres://default:cZVGF62eRQsa@ep-floral-dream-a4cqkv4k-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require",
 })
@@ -27,7 +26,7 @@ const pool = new Pool({
     }
 }); */
 
-app.post('/admin', async (req, res) => {
+app.post('/api/login', async (req, res) => {
     try {
         const { id, pass } = req.body;
         const validacion = await validarEmpleado(id, pass);
