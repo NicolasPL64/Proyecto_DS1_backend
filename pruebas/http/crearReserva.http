@@ -4,8 +4,8 @@ Content-Type: application/json
 
 {
     "estado": "BRUTAL",
-    "f_entrada": "2024-05-04",
-    "f_salida": "2024-05-07",
+    "f_entrada": "2024-06-01",
+    "f_salida": "2024-06-10",
     "id_Cliente": "789",
     "id_Empleado": "123",
     "id_Habitacion": "020"

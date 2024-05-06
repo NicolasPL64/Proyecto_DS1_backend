@@ -7,7 +7,7 @@ const validarEmpleado = async (id, pass) => {
         if (resultado.rowCount > 0) {
             const empleado = resultado.rows[0];
 
-            if (empleado.Contrasenia === pass) {
+            if (empleado.CONTRASENIA === pass) {
                 console.log('Contraseña correcta');
                 return { existeUsuario: true, passCorrecto: true, codigoEstado: 200 };
             } else {
