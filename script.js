@@ -46,7 +46,7 @@ app.post('/api/crearReserva', async (req, res) => {
         const { id, estado, f_entrada, f_salida, idCliente, idEmpleado, idHabitacion } = req.body;
         // Aquí va tu lógica para insertar la reserva
         await insertarReserva(id, estado, f_entrada, f_salida, idCliente, idEmpleado, idHabitacion)
-        res.status(200).json({hola: "Reserva Creada Correctamente"});
+        res.status(200).json({ hola: "Reserva Creada Correctamente" });
     } catch (error) {
         console.error("Error al procesar la solicitud:", error);
         res.status(500).json({ error: "Error interno del servidor" });
@@ -99,6 +99,9 @@ const arreglarFechas = (data) => {
     return data;
 };
 
+
+/*CONSULTAR*/
+
 const todosEmpleados = async () => {
     const consulta = 'SELECT * FROM public."EMPLEADO"';
     const result = await ejecutarConsulta(consulta);
@@ -108,8 +111,6 @@ const todosEmpleados = async () => {
     console.log(empleadosFormateados);
     return empleadosFormateados;
 };
-
-/*CONSULTAR*/
 
 const todosClientes = async () => {
     const consulta = 'SELECT * FROM public."CLIENTE"';
@@ -168,7 +169,7 @@ const insertarCliente = async (id, nombre, correo, telefono) => {
     }
 };
 
-const insertarEmpleado = async(id, contraseña, correo, nombre, fecha_nac, direccion, salario, telefono, fecha_inicio) => {
+const insertarEmpleado = async (id, contraseña, correo, nombre, fecha_nac, direccion, salario, telefono, fecha_inicio) => {
     try {
         const consultaExistencia = `
         SELECT COUNT(*) AS count
@@ -176,7 +177,7 @@ const insertarEmpleado = async(id, contraseña, correo, nombre, fecha_nac, direc
         WHERE "ID" = $1`;
         const existencia = await ejecutarConsulta(consultaExistencia, [id]);
 
-        if(existencia[0].count > 0){
+        if (existencia[0].count > 0) {
             console.log("El empleado ya se encuentra registrado en la base de datos.");
             return;
         }
@@ -188,7 +189,7 @@ const insertarEmpleado = async(id, contraseña, correo, nombre, fecha_nac, direc
         RETURNING *;`;
         const values = [id, contraseña, correo, nombre, fecha_nac, direccion, salario, telefono, fecha_inicio];
         const result = await ejecutarConsulta(consultaInsercion, values);
-        
+
         const empleadosFormateados = arreglarFechas(result);
         console.log("Empleado insertado: ", result);
         return empleadosFormateados;
@@ -198,15 +199,15 @@ const insertarEmpleado = async(id, contraseña, correo, nombre, fecha_nac, direc
     }
 };
 
-const insertarHabitacion = async(id, tipo, precio, estado, capacidad) => {
+const insertarHabitacion = async (id, tipo, precio, estado, capacidad) => {
     try {
         const consultaExistencia = `
         SELECT COUNT(*) AS count
         FROM public."HABITACION"
         WHERE "ID" = $1`;
-        const existencia = await ejecutarConsulta(consultaExistencia,[id]);
+        const existencia = await ejecutarConsulta(consultaExistencia, [id]);
 
-        if(existencia[0].count > 0){
+        if (existencia[0].count > 0) {
             console.log("La habitacion ya se encuentra registrada en la base de datos");
             return;
         }
@@ -216,25 +217,25 @@ const insertarHabitacion = async(id, tipo, precio, estado, capacidad) => {
             "ID", "TIPO", "PRECIO", "ESTADO", "CAPACIDAD")
             VALUES ($1, $2, $3, $4, $5)
             RETURNING *;`;
-            const values = [id, tipo, precio, estado, capacidad];
-            const result = await ejecutarConsulta(consultaInsercion, values);
-            console.log("Habitacion insertada: ", result);
-            return result;
+        const values = [id, tipo, precio, estado, capacidad];
+        const result = await ejecutarConsulta(consultaInsercion, values);
+        console.log("Habitacion insertada: ", result);
+        return result;
     } catch (error) {
         console.log('Error al insertar habitacion: ', error);
         throw error;
     }
 }
 
-const insertarReserva = async(id, estado, f_entrada, f_salida, idCliente, idEmpleado, idHabitacion) => {
+const insertarReserva = async (id, estado, f_entrada, f_salida, idCliente, idEmpleado, idHabitacion) => {
     try {
         const consultaExistencia = `
         SELECT COUNT(*) AS count
         FROM public."RESERVA"
         WHERE "ID" = $1`;
-        const existencia = await ejecutarConsulta(consultaExistencia,[id]);
+        const existencia = await ejecutarConsulta(consultaExistencia, [id]);
 
-        if(existencia[0].count > 0){
+        if (existencia[0].count > 0) {
             console.log("La reserva ya se encuentra en la base de datos");
             return;
         }
@@ -244,12 +245,12 @@ const insertarReserva = async(id, estado, f_entrada, f_salida, idCliente, idEmpl
             "ID", "ESTADO", "F_ENTRADA", "F_SALIDA", "ID_CLIENTE", "ID_EMPLEADO", "ID_HABITACION")
             VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING *;`;
-            const values = [id, estado, f_entrada, f_salida, idCliente, idEmpleado, idHabitacion];
-            const result = await ejecutarConsulta(consultaInsercion, values);
+        const values = [id, estado, f_entrada, f_salida, idCliente, idEmpleado, idHabitacion];
+        const result = await ejecutarConsulta(consultaInsercion, values);
 
-            const reservasFormateadas = arreglarFechas(result);
-            console.log("Reserva Creada: ", result);
-            return reservasFormateadas;
+        const reservasFormateadas = arreglarFechas(result);
+        console.log("Reserva Creada: ", result);
+        return reservasFormateadas;
     } catch (error) {
         console.log('Error al crear la reserva: ', error);
         throw error;
@@ -331,7 +332,7 @@ const eliminarEmpleado = async (id) => {
         WHERE "ID" = $1
         RETURNING *;`;
         const result = await ejecutarConsulta(consultaEliminacion, [id]);
-        
+
         const empleadosFormateados = arreglarFechas(result);
         console.log("Empleado eliminado:", result);
         return empleadosFormateados;
@@ -344,7 +345,7 @@ const eliminarEmpleado = async (id) => {
 
 const eliminarReserva = async (id) => {
     try {
-        const consultaExistencia= `
+        const consultaExistencia = `
         SELECT COUNT(*) AS count
         FROM public."RESERVA"
         WHERE "ID" = $1`;
@@ -360,7 +361,7 @@ const eliminarReserva = async (id) => {
         WHERE "ID" = $1
         RETURNING *;`;
         const result = await ejecutarConsulta(consultaEliminacion, [id]);
-        
+
         const reservasFormateadas = arreglarFechas(result);
         console.log("Reserva eliminada:", result);
         return reservasFormateadas;
@@ -399,7 +400,7 @@ const actualizarEmpleado = async (id, nuevaContraseña, nuevoCorreo, nuevoNombre
             RETURNING *;`;
         const values = [id, nuevaContraseña, nuevoCorreo, nuevoNombre, nuevaFechaNacimiento, nuevaDireccion, nuevoSalario, nuevoTelefono, nuevaFechaInicio];
         const result = await ejecutarConsulta(consultaActualizacion, values);
-        
+
         const empleadosFormateados = arreglarFechas(result);
         console.log("Empleado actualizado:", result);
         return empleadosFormateados;
@@ -437,7 +438,7 @@ const actualizarReserva = async (id, nuevoEstado, nuevaFechaEntrada, nuevaFechaS
             RETURNING *;`;
         const values = [id, nuevoEstado, nuevaFechaEntrada, nuevaFechaSalida, nuevoIdCliente, nuevoIdEmpleado, nuevoIdHabitacion];
         const result = await ejecutarConsulta(consultaActualizacion, values);
-        
+
         const reservasFormateadas = arreglarFechas(result);
         console.log("Reserva actualizada:", result);
         return reservasFormateadas;
@@ -523,6 +524,7 @@ const verReservaPorId = async (id) => {
     }
 };
 
+
 (async () => {
     try {
         /*Consulta Todos*/
@@ -535,12 +537,12 @@ const verReservaPorId = async (id) => {
         //await insertarEmpleado('31794', 'cocacola', 'carolina@gmail.com', 'Carolina Puentes', '11/06/1981', 'Tulua', '1200000', '51656', '12/01/2021');
         //await insertarHabitacion('020', 'SENCILLA', '150000', 'DISPONIBLE', '3');
         //await insertarReserva('0012', 'EXITOSA', '2024-08-30', '2024-10-27', '1001', '100634', '020');
-         /*Eliminar por primary-key*/
-         //await eliminarHabitacion();
-         //await eliminarHabitacion();
-         //await eliminarEmpleado();
-         //await eliminarReserva();
-         //await eliminarCliente();
+        /*Eliminar por primary-key*/
+        //await eliminarHabitacion();
+        //await eliminarHabitacion();
+        //await eliminarEmpleado();
+        //await eliminarReserva();
+        //await eliminarCliente();
         /*Consulta por primary-key*/
         //await verClientePorId('10091');
         //await verEmpleadoPorId('123');
@@ -554,4 +556,4 @@ const verReservaPorId = async (id) => {
     } finally {
         await desconectar();
     }
-})();
+});
