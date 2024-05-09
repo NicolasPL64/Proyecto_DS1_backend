@@ -10,29 +10,11 @@ const consultarPorId = async (tabla, id) => {
             return null;
         }
 
-        const resultFormateado = tabla === "EMPLEADO" || tabla === "RESERVA" ? arreglarFechas(result) : result;
-        console.log(`${tabla} encontrado:`, resultFormateado);
-        return resultFormateado;
+        return result;
     } catch (error) {
         console.error(`Error al buscar ${tabla} por ID:`, error);
         throw error;
     }
-};
-
-const consultarClientePorId = async (id) => {
-    return await consultarPorId("CLIENTE", id);
-};
-
-const consultarEmpleadoPorId = async (id) => {
-    return await consultarPorId("EMPLEADO", id);
-};
-
-const consultarHabitacionPorId = async (id) => {
-    return await consultarPorId("HABITACION", id);
-};
-
-const consultarReservaPorId = async (id) => {
-    return await consultarPorId("RESERVA", id);
 };
 
 module.exports = consultarPorId;

@@ -12,5 +12,4 @@ Content-Type: application/json
     "salario": 1000,
     "telefono": "12345678",
     "fecha_inicio": "2024-05-04"
-
 }
