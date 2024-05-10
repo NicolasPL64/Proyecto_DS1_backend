@@ -4,7 +4,8 @@ Content-Type: application/json
 
 {
     "id": "99",
-    "nombre": "Mis Pez",
+    "nombre": "Mis Pezon",
     "correo": "mispez@example.ones",
-    "telefono": "909090"
+    "telefono": "909090",
+    "habilitado": true
 }

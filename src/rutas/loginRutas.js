@@ -1,15 +1,20 @@
 const express = require('express');
 const rutaLogin = express.Router();
-const validarEmpleado = require('../funciones/loginFunc');
+const { validarLogin } = require('../funciones/loginFunc');
 
 rutaLogin.post('/', async (req, res) => {
     try {
         const { id, pass } = req.body;
-        const validacion = await validarEmpleado(id, pass);
+        const validacion = await validarLogin(id, pass);
 
         res.status(validacion.codigoEstado)
-            .json({ existe: validacion.existeUsuario, correcto: validacion.passCorrecto });
+            .json({
+                existe: validacion.existeUsuario,
+                correcto: validacion.passCorrecto,
+                recuperacion: validacion.modoRecuperacion
+            });
     } catch (error) {
+        console.error('Error al validar el login: ', error);
         throw error;
     }
 });

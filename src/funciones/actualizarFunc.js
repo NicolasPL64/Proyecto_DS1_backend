@@ -9,8 +9,8 @@ const actualizarEnTabla = async (tabla, columnas, valores) => {
             RETURNING *;`;
 
         const result = await ejecutarConsulta(consultaActualizacion, valores);
-        console.log(`${tabla} actualizado:`, result);
-        return result;
+        console.log(`${tabla} actualizado:`, result.rows);
+        return result.rows;
     } catch (error) {
         console.error(`Error al actualizar ${tabla}:`, error);
         throw error;

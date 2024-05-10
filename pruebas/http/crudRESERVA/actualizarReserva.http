@@ -9,5 +9,6 @@ Content-Type: application/json
     "f_salida": "2014-06-10",
     "id_Cliente": "99",
     "id_Empleado": "6464",
-    "id_Habitacion": "1"
+    "id_Habitacion": "1",
+    "habilitado": true
 }

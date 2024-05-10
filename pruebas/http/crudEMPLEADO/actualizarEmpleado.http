@@ -11,5 +11,6 @@ Content-Type: application/json
     "direccion": "ñCalle Esternocleidomastoideo",
     "salario": 2000,
     "telefono": "112345678",
-    "fecha_inicio": "2023-05-04"
+    "fecha_inicio": "2023-05-04",
+    "habilitado": true
 }

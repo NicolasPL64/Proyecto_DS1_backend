@@ -7,5 +7,6 @@ Content-Type: application/json
     "tipo": "SENCILLA",
     "precio": 999,
     "estado": "Ocupada",
-    "capacidad": 22
+    "capacidad": 22,
+    "habilitado": true
 }

@@ -1,8 +1,10 @@
 const ejecutarConsulta = require("./ejecutarCRUD");
 
+const TABLAS_SIN_VERIFICACION = ["HABITACION", "RESERVA", "NODEMAILER"];
+
 const insertarEnTabla = async (tabla, columnas, valores) => {
     try {
-        if (tabla !== "HABITACION" && tabla !== "RESERVA") {
+        if (!TABLAS_SIN_VERIFICACION.includes(tabla)) {
             // Verificar si el registro ya existe
             const consultaExistencia = `
             SELECT COUNT(*) AS count
@@ -12,7 +14,7 @@ const insertarEnTabla = async (tabla, columnas, valores) => {
 
             if (existencia[0].count > 0) {
                 console.log(`El registro ya está en la tabla ${tabla}.`);
-                return;
+                return null;
             }
         }
         const consultaInsercion = `
@@ -20,8 +22,8 @@ const insertarEnTabla = async (tabla, columnas, valores) => {
             VALUES (${columnas.map((_, i) => `$${i + 1}`).join(", ")})
             RETURNING *;`;
         const result = await ejecutarConsulta(consultaInsercion, valores);
-        console.log(`Registro insertado en ${tabla}:`, result);
-        return result;
+        console.log(`Registro insertado en ${tabla}:`, result.rows);
+        return result.rows;
     } catch (error) {
         console.error(`Error al insertar en ${tabla}:`, error);
         throw error;
