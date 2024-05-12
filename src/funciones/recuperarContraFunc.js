@@ -8,7 +8,7 @@ async function recuperarContrasenia(id) {
     const infoEmpleado = await consultarPorId('EMPLEADO', id)
     if (infoEmpleado === null) {
         console.log(`El empleado con ID ${id} no se encuentra en la base de datos.`);
-        return null;
+        return { codigoEstado: 404, correo: null };;
     }
 
     const infoNodemailer = await pool.query(
@@ -33,10 +33,11 @@ async function recuperarContrasenia(id) {
     transporter.sendMail(mensaje, (err, info) => {
         if (err) {
             console.log('Error occurred. ' + err.message);
-            return process.exit(1);
+            return { codigoEstado: 500, correo: infoEmpleado.rows[0].CORREO };
         }
         insertarEnTabla('NODEMAILER', ['CODIGO', 'ID'], [passTemporal, id]);
         console.log('Message sent: %s', info.messageId);
+        return { codigoEstado: 200, correo: infoEmpleado.rows[0].CORREO };
     });
 }
 

@@ -12,7 +12,7 @@ const actualizarEnTabla = async (tabla, columnas, valores) => {
         console.log(`${tabla} actualizado:`, result.rows);
         return result.rows;
     } catch (error) {
-        console.error(`Error al actualizar ${tabla}:`, error);
+        console.error(`Error al actualizar ${tabla}.`);
         throw error;
     }
 };
