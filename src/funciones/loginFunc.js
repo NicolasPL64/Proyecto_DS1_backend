@@ -5,7 +5,7 @@ const validarLogin = async (id, pass) => {
     try {
         const resultado = await consultarPorId('EMPLEADO', id);
 
-        if (resultado.rowCount > 0) {
+        if (resultado != null) {
             const resultadoNodemailer = await pool.query(
                 `SELECT "CODIGO"
                 FROM public."NODEMAILER"
@@ -28,15 +28,20 @@ const validarLogin = async (id, pass) => {
             return { existeUsuario: false, passCorrecto: false, codigoEstado: 401, modoRecuperacion: false };
         }
     } catch (error) {
-        console.error('Error al consultar la base de datos: ', error);
+        console.error('Error al intentar iniciar sesión: ', error);
         throw error;
     }
 };
 
 async function deshabilitarCodsRecuperacion(id) {
-    await pool.query(`UPDATE public."NODEMAILER"
+    try {
+        await pool.query(`UPDATE public."NODEMAILER"
                 SET "USADO" = true
                 WHERE "ID" = $1`, [id]);
+    } catch (error) {
+        console.error('Error al deshabilitar códigos de recuperación.');
+        throw error;
+    }
 }
 
 module.exports = {

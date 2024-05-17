@@ -10,5 +10,7 @@ Content-Type: application/json
     "id_Cliente": "99",
     "id_Empleado": "6464",
     "id_Habitacion": "1",
+    "precio": 1000,
+    "descripcion": ,
     "habilitado": true
 }
