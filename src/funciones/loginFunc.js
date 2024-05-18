@@ -4,6 +4,13 @@ const consultarPorId = require('./consultaIdFunc');
 const validarLogin = async (id, pass) => {
     try {
         const resultado = await consultarPorId('EMPLEADO', id);
+        let jsonReturn = {
+            existeUsuario: false,
+            passCorrecto: false,
+            codigoEstado: 200,
+            modoRecuperacion: false,
+            modoAdmin: false
+        };
 
         if (resultado != null) {
             const resultadoNodemailer = await pool.query(
@@ -11,21 +18,23 @@ const validarLogin = async (id, pass) => {
                 FROM public."NODEMAILER"
                 WHERE "USADO" = false AND "CODIGO" = '${pass}'`);
 
+            if (resultado.rows[0].ADMIN === true) jsonReturn.modoAdmin = true;
+
             if (resultado.rows[0].CONTRASENIA === pass) {
                 console.log('Contraseña correcta');
                 deshabilitarCodsRecuperacion(id);
-                return { existeUsuario: true, passCorrecto: true, codigoEstado: 200, modoRecuperacion: false };
+                return Object.assign(jsonReturn, { existeUsuario: true, passCorrecto: true });;
             } else if (resultadoNodemailer.rowCount > 0) {
                 console.log('Contraseña temporal correcta');
                 deshabilitarCodsRecuperacion(id);
-                return { existeUsuario: true, passCorrecto: true, codigoEstado: 200, modoRecuperacion: true };
+                return Object.assign(jsonReturn, { existeUsuario: true, passCorrecto: true, modoRecuperacion: true });;
             } else {
                 console.log('Contraseña incorrecta');
-                return { existeUsuario: true, passCorrecto: false, codigoEstado: 401, modoRecuperacion: false };
+                return Object.assign(jsonReturn, { existeUsuario: true, codigoEstado: 401 });;
             }
         } else {
             console.log('Usuario no encontrado');
-            return { existeUsuario: false, passCorrecto: false, codigoEstado: 401, modoRecuperacion: false };
+            return Object.assign(jsonReturn, { codigoEstado: 401 });;
         }
     } catch (error) {
         console.error('Error al intentar iniciar sesión: ', error);

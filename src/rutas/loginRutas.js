@@ -6,14 +6,14 @@ const actualizarEnTabla = require('../funciones/actualizarFunc');
 
 rutaLogin.post('/', async (req, res) => {
     const { id, pass } = req.body;
-    console.log(id, pass)
     try {
         const validacion = await validarLogin(id, pass);
         res.status(validacion.codigoEstado)
             .json({
                 existe: validacion.existeUsuario,
                 correcto: validacion.passCorrecto,
-                recuperacion: validacion.modoRecuperacion
+                recuperacion: validacion.modoRecuperacion,
+                admin: validacion.modoAdmin
             });
     } catch (error) {
         res.sendStatus(500);
