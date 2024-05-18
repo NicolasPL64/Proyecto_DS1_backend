@@ -7,14 +7,14 @@ Content-Type: application/json
         "estado": "PENDIENTE",
         "f_entrada": "2024-06-01",
         "f_salida": "2024-06-10",
-        "id_Cliente": "789",
-        "id_Empleado": "1129",
-        "id_Habitacion": "9",
+        "id_Cliente": 789,
+        "id_Empleado": 1129,
+        "id_Habitacion": 9,
         "precio": 1000,
         "descripcion": "Los clientes huelen regular."
     },
     "cliente": {
-        "id": "1129",
+        "id": 1129,
         "nombre": "Nicolás",
         "correo": "npl@correos.con",
         "telefono": "318705",

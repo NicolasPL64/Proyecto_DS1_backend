@@ -25,7 +25,8 @@ rutaCRUD.post('/:tabla/consultar', async (req, res, next) => {
     const id = req.body.id;
     try {
         const result = await consultarPorId(tabla, id);
-        res.json(result);
+        if (result === null) res.sendStatus(404);
+        else res.json(result);
     } catch (error) {
         next(error);
     }
