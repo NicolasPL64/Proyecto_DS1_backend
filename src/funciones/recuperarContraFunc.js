@@ -43,12 +43,6 @@ async function recuperarContrasenia(id) {
     } catch (error) {
         throw error;
     }
-
-    /* catch (codigoEstado) {
-        if (codigoEstado === 404) throw codigoEstado
-        console.error('Error al intentar recuperar la contraseña.');
-        throw codigoEstado = 500;
-    } */
 }
 
 module.exports = recuperarContrasenia;
