@@ -16,7 +16,7 @@ rutaLogin.post('/', async (req, res) => {
                 admin: validacion.modoAdmin
             });
     } catch (error) {
-        next(error);
+        res.sendStatus(500);
     }
 });
 
@@ -31,20 +31,16 @@ rutaLogin.post('/recuperarContra', async (req, res, next) => {
 
 });
 
-rutaLogin.post('/cambiarContra', async (req, res, next) => {
+rutaLogin.post('/cambiarContra', async (req, res) => {
     const { id, passNuevo } = req.body;
-    try {
-        await actualizarEnTabla('EMPLEADO', ['ID', 'CONTRASENIA'], [id, passNuevo]);
-        res.sendStatus(200);
-    } catch (error) {
-        next(error);
-    }
+    await actualizarEnTabla('EMPLEADO', ['ID', 'CONTRASENIA'], [id, passNuevo]);
+    res.sendStatus(200);
 });
 
 //////////////////////////////////////////// 
 
 rutaLogin.use(function (err, req, res, next) {
-    if (err.statusCode) res.sendStatus(err.statusCode);
+    res.sendStatus(err.statusCode);
     next(err);
 });
 
