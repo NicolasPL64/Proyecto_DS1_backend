@@ -1,4 +1,8 @@
 const pool = require('../configs/db.config');
+const JsonWebToken = require('jsonwebtoken');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const validarEmpleado = async (id, pass) => {
     try {
@@ -9,7 +13,13 @@ const validarEmpleado = async (id, pass) => {
 
             if (empleado.CONTRASENIA === pass) {
                 console.log('Contraseña correcta');
-                return { existeUsuario: true, passCorrecto: true, codigoEstado: 200 };
+
+                // Generar el token JWT
+                const token = JsonWebToken.sign({ id: resultado.id },
+                    process.env.JWT_SECRET,
+                    { expiresIn: process.env.JWT_EXPIRATION });
+
+                return { existeUsuario: true, passCorrecto: true, codigoEstado: 200, token };
             } else {
                 console.log('Contraseña incorrecta');
                 return { existeUsuario: true, passCorrecto: false, codigoEstado: 401 };
