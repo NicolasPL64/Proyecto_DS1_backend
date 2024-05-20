@@ -1,0 +1,16 @@
+// Archivo crearReserva.http
+POST http://localhost:3000/api/empleaddo/actualizar HTTP/1.1
+Content-Type: application/json
+
+{
+    "id": "6464",
+    "contrasenia": "ñBRUTAL",
+    "correo": "ñpopeye@example.lol",
+    "nombre": "ñPop Eye",
+    "fecha_nacimiento": "2005-02-14",
+    "direccion": "ñCalle Esternocleidomastoideo",
+    "salario": 2000,
+    "telefono": "112345678",
+    "fecha_inicio": "2023-05-04",
+    "habilitado": true
+}

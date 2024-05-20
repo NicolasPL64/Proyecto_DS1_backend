@@ -1,0 +1,11 @@
+// Archivo crearReserva.http
+POST http://localhost:3000/api/cliente/actualizar HTTP/1.1
+Content-Type: application/json
+
+{
+    "id": "99",
+    "nombre": "Mis Pezon",
+    "correo": "mispez@example.ones",
+    "telefono": "909090",
+    "habilitado": true
+}

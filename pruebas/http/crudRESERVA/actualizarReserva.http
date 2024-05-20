@@ -1,0 +1,16 @@
+// Archivo crearReserva.http
+POST http://localhost:3000/api/reserva/actualizar HTTP/1.1
+Content-Type: application/json
+
+{
+    "id": "1",
+    "estado": "SUSESFUL",
+    "f_entrada": "2014-06-01",
+    "f_salida": "2014-06-10",
+    "id_Cliente": "99",
+    "id_Empleado": "6464",
+    "id_Habitacion": "1",
+    "precio": 1000,
+    "descripcion": ,
+    "habilitado": true
+}

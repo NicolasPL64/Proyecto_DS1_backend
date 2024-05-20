@@ -18,6 +18,12 @@ app.get("/", (req, res) => {
 app.use('/api/login', rutaLogin);
 app.use('/api', rutaCRUD);
 
+app.use(function (err, req, res, next) {
+    console.error(err.stack); // Imprime el error en la consola
+    console.log("Error capturado por Express, probablemente fue culpa de Petro.")
+    res.sendStatus(500);
+});
+
 app.listen(PORT, () => {
     console.log(`--------> Backend escuchando en http://localhost:${PORT} <--------`);
 });

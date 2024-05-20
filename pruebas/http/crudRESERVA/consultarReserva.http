@@ -1,0 +1,7 @@
+// Archivo crearReserva.http
+POST http://localhost:3000/api/habitacion/consultar HTTP/1.1
+Content-Type: application/json
+
+{
+    "id": "3"
+}
