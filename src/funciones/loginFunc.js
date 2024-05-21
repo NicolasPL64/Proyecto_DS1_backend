@@ -1,12 +1,6 @@
 const pool = require('../configs/db.config');
-<<<<<<< HEAD
-const JsonWebToken = require('jsonwebtoken');
-const dotenv = require('dotenv');
-
-dotenv.config();
-=======
 const consultarPorId = require('./consultaIdFunc');
->>>>>>> 31ec54a9e928a6940c61212e0537d2a511b0cf87
+const JsonWebToken = require('jsonwebtoken');
 
 const validarLogin = async (id, pass) => {
     try {
@@ -16,7 +10,8 @@ const validarLogin = async (id, pass) => {
             passCorrecto: false,
             codigoEstado: 200,
             modoRecuperacion: false,
-            modoAdmin: false
+            modoAdmin: false,
+            token: null
         };
 
         if (resultado != null) {
@@ -29,25 +24,21 @@ const validarLogin = async (id, pass) => {
 
             if (resultado.rows[0].CONTRASENIA === pass) {
                 console.log('Contraseña correcta');
-<<<<<<< HEAD
 
                 // Generar el token JWT
                 const token = JsonWebToken.sign({ id: resultado.id },
                     process.env.JWT_SECRET,
                     { expiresIn: process.env.JWT_EXPIRATION });
 
-                return { existeUsuario: true, passCorrecto: true, codigoEstado: 200, token };
-=======
                 deshabilitarCodsRecuperacion(id);
-                return Object.assign(jsonReturn, { existeUsuario: true, passCorrecto: true });;
+                return Object.assign(jsonReturn, { existeUsuario: true, passCorrecto: true, token: token });;
             } else if (resultadoNodemailer.rowCount > 0) {
                 console.log('Contraseña temporal correcta');
                 deshabilitarCodsRecuperacion(id);
                 return Object.assign(jsonReturn, { existeUsuario: true, passCorrecto: true, modoRecuperacion: true });;
->>>>>>> 31ec54a9e928a6940c61212e0537d2a511b0cf87
             } else {
                 console.log('Contraseña incorrecta');
-                return Object.assign(jsonReturn, { existeUsuario: true, codigoEstado: 401 });;
+                return Object.assign(jsonReturn, { existeUsuario: true, codigoEstado: 401 });
             }
         } else {
             console.log('Usuario no encontrado');
