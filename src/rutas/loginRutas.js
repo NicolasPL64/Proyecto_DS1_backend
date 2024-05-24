@@ -3,12 +3,33 @@ const rutaLogin = express.Router();
 const { validarLogin } = require('../funciones/loginFunc');
 const recuperarContrasenia = require('../funciones/recuperarContraFunc');
 const actualizarEnTabla = require('../funciones/actualizarFunc');
+const jwt = require('jsonwebtoken');
 
-rutaLogin.post('/', async (req, res) => {
+
+function verificarToken(req, res, next) {
+    const token = req.cookies.jwt;
+    if (!token) {
+        return res.status(401).json({ mensaje: 'No se proporcionó ningún token' });
+    }
+
+    try {
+        const datos = JsonWebToken.verify(token, process.env.JWT_SECRET);
+        req.usuario = datos;
+        next();
+    } catch (error) {
+        return res.status(401).json({ mensaje: 'Token inválido' });
+    }
+}
+
+rutaLogin.post('/', async (req, res, next) => {
     const { id, pass } = req.body;
     try {
         const validacion = await validarLogin(id, pass);
         console.log("Token:", validacion.token);
+
+        // Decodificar el token y imprimir los datos
+        const decodedToken = jwt.decode(validacion.token);
+        console.log("Datos del token:", decodedToken);
 
         // Configurar las opciones de la cookie
         const cookieOptions = {
@@ -28,6 +49,8 @@ rutaLogin.post('/', async (req, res) => {
         next(error);
     }
 });
+
+rutaLogin.use(verificarToken);
 
 rutaLogin.post('/recuperarContra', async (req, res, next) => {
     try {
