@@ -5,8 +5,8 @@ Content-Type: application/json
 {
     "reserva": {
         "estado": "PENDIENTE",
-        "f_entrada": "2024-06-01",
-        "f_salida": "2024-06-10",
+        "f_entrada": "2024-05-29",
+        "f_salida": "2024-06-01",
         "id_Cliente": "789",
         "id_Empleado": "1129",
         "id_Habitacion": "9",

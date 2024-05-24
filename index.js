@@ -15,15 +15,18 @@ app.use(express.json()); // Habilitar el uso de JSON en las peticiones
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, '../Proyecto_DS1/dist', 'index.html'));
 });
+
 app.use('/api/login', rutaLogin);
 app.use('/api', rutaCRUD);
 
+// Manejo de errores global
 app.use(function (err, req, res, next) {
+    if (err.statusCode) res.status(err.statusCode).send(err.message);
+    else res.sendStatus(500);
     console.error(err.stack); // Imprime el error en la consola
     console.log("Error capturado por Express, probablemente fue culpa de Petro.")
-    res.sendStatus(500);
 });
 
 app.listen(PORT, () => {
-    console.log(`--------> Backend escuchando en http://localhost:${PORT} <--------`);
+    console.log(`--------> Backend parando bolas en http://localhost:${PORT} <--------`);
 });

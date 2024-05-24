@@ -1,5 +1,5 @@
 // Archivo crearReserva.http
-POST http://localhost:3000/api/reserva/actualizar HTTP/1.1
+PUT http://localhost:3000/api/reserva/actualizar HTTP/1.1
 Content-Type: application/json
 
 {

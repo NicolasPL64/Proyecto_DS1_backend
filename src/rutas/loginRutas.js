@@ -51,10 +51,10 @@ rutaLogin.post('/cambiarContra', async (req, res, next) => {
 });
 
 //////////////////////////////////////////// 
-
+/* 
 rutaLogin.use(function (err, req, res, next) {
     if (err.statusCode) res.sendStatus(err.statusCode);
     next(err);
-});
+}); */
 
 module.exports = rutaLogin;

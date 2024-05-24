@@ -20,7 +20,7 @@ rutaCRUD.post('/:tabla/insertar', async (req, res, next) => {
     }
 });
 
-rutaCRUD.post('/:tabla/consultar', async (req, res, next) => {
+rutaCRUD.get('/:tabla/consultar', async (req, res, next) => {
     const tabla = req.params.tabla.toUpperCase();
     const id = req.body.id;
     try {
@@ -32,7 +32,7 @@ rutaCRUD.post('/:tabla/consultar', async (req, res, next) => {
     }
 });
 
-rutaCRUD.post('/:tabla/actualizar', async (req, res) => {
+rutaCRUD.put('/:tabla/actualizar', async (req, res) => {
     const tabla = req.params.tabla.toUpperCase();
     const columnas = Object.keys(req.body).map(key => key.toUpperCase());
     const valores = Object.values(req.body);
