@@ -1,9 +1,9 @@
-const consultarPorId = require('./consultaIdFunc');
-const insertarEnTabla = require('./insertarFunc');
+const consultarPorId = require('../crud/consultaIdFunc');
+const insertarEnTabla = require('../crud/insertarFunc');
 const { deshabilitarCodsRecuperacion } = require('./loginFunc');
-const ErrorStatus = require('../utilidades/errorStatus');
-const pool = require('../configs/db.config');
-const transporter = require('../configs/nmail.config');
+const ErrorStatus = require('../../utilidades/errorStatus');
+const pool = require('../../configs/db.config');
+const transporter = require('../../configs/nmail.config');
 
 async function recuperarContrasenia(id) {
     const infoEmpleado = await consultarPorId('EMPLEADO', id)

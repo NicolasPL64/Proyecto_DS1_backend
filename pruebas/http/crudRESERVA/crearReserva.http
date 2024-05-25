@@ -1,20 +1,19 @@
-// Archivo crearReserva.http
 POST http://localhost:3000/api/reserva/insertar HTTP/1.1
 Content-Type: application/json
 
 {
     "reserva": {
         "estado": "PENDIENTE",
-        "f_entrada": "2024-05-29",
-        "f_salida": "2024-06-01",
+        "f_entrada": "2024-05-18",
+        "f_salida": "2024-05-23",
         "id_Cliente": "789",
         "id_Empleado": "1129",
-        "id_Habitacion": "9",
+        "id_Habitacion": "3",
         "precio": 1000,
         "descripcion": "Los clientes huelen regular."
     },
     "cliente": {
-        "id": "1129",
+        "id": "789",
         "nombre": "Nicolás",
         "correo": "npl@correos.con",
         "telefono": "318705",

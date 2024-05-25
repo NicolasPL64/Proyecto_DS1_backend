@@ -1,35 +1,22 @@
 const express = require('express');
 const rutaLogin = express.Router();
-const { validarLogin } = require('../funciones/loginFunc');
-const recuperarContrasenia = require('../funciones/recuperarContraFunc');
-const actualizarEnTabla = require('../funciones/actualizarFunc');
+const { validarLogin } = require('../funciones/login/loginFunc');
+const recuperarContrasenia = require('../funciones/login/recuperarContraFunc');
+const actualizarEnTabla = require('../funciones/crud/actualizarFunc');
+const verificarToken = require('../funciones/login/verificarTokenFunc');
 const jwt = require('jsonwebtoken');
 
 
-function verificarToken(req, res, next) {
-    const token = req.cookies.jwt;
-    if (!token) {
-        return res.status(401).json({ mensaje: 'No se proporcionó ningún token' });
-    }
-
-    try {
-        const datos = JsonWebToken.verify(token, process.env.JWT_SECRET);
-        req.usuario = datos;
-        next();
-    } catch (error) {
-        return res.status(401).json({ mensaje: 'Token inválido' });
-    }
-}
-
 rutaLogin.post('/', async (req, res, next) => {
     const { id, pass } = req.body;
+
     try {
         const validacion = await validarLogin(id, pass);
         console.log("Token:", validacion.token);
 
         // Decodificar el token y imprimir los datos
         const decodedToken = jwt.decode(validacion.token);
-        console.log("Datos del token:", decodedToken);
+        console.log("Datos del token: ", decodedToken);
 
         // Configurar las opciones de la cookie
         const cookieOptions = {
@@ -50,8 +37,6 @@ rutaLogin.post('/', async (req, res, next) => {
     }
 });
 
-rutaLogin.use(verificarToken);
-
 rutaLogin.post('/recuperarContra', async (req, res, next) => {
     try {
         const validacion = await recuperarContrasenia(req.body.id);
@@ -60,7 +45,6 @@ rutaLogin.post('/recuperarContra', async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-
 });
 
 rutaLogin.post('/cambiarContra', async (req, res, next) => {
@@ -73,11 +57,6 @@ rutaLogin.post('/cambiarContra', async (req, res, next) => {
     }
 });
 
-//////////////////////////////////////////// 
-/* 
-rutaLogin.use(function (err, req, res, next) {
-    if (err.statusCode) res.sendStatus(err.statusCode);
-    next(err);
-}); */
+rutaLogin.use(verificarToken);
 
 module.exports = rutaLogin;

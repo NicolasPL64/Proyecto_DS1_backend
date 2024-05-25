@@ -1,10 +1,10 @@
 const consultarPorId = require('./consultaIdFunc');
 const insertarEnTabla = require('./insertarFunc');
-const ErrorStatus = require('../utilidades/errorStatus');
-const pool = require('../configs/db.config');
+const ErrorStatus = require('../../utilidades/errorStatus');
+const pool = require('../../configs/db.config');
 
 async function insertarReservaConCliente(req) {
-    if (await comprobarCruceFechas(req.body.reserva.f_entrada, req.body.reserva.f_salida))
+    if (await comprobarCruces(req.body.reserva.f_entrada, req.body.reserva.f_salida, req.body.reserva.id_Habitacion))
         throw new ErrorStatus('Ya existe una reserva en esas fechas.', 409);
 
     // Comprueba si el cliente ya existe en la base de datos
@@ -18,11 +18,12 @@ async function insertarReservaConCliente(req) {
     await insertarEnTabla('RESERVA', columnasReserva, valoresReserva);
 }
 
-async function comprobarCruceFechas(fechaEntrada, fechaSalida) {
+async function comprobarCruces(fechaEntrada, fechaSalida, idHabitacion) {
     const result = await pool.query(`SELECT * 
                                     FROM public."RESERVA" 
-                                    WHERE ("F_ENTRADA" BETWEEN $1 AND $2) OR ("F_SALIDA" BETWEEN $3 AND $4)`,
-        [fechaEntrada, fechaSalida, fechaEntrada, fechaSalida]);
+                                    WHERE (("F_ENTRADA" BETWEEN $1 AND $2) OR ("F_SALIDA" BETWEEN $3 AND $4))
+                                        AND "ID_HABITACION" = $5 AND "HABILITADO" = true`,
+        [fechaEntrada, fechaSalida, fechaEntrada, fechaSalida, idHabitacion]);
     return result.rowCount > 0;
 }
 

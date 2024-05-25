@@ -1,5 +1,5 @@
-const pool = require('../configs/db.config');
-const consultarPorId = require('./consultaIdFunc');
+const pool = require('../../configs/db.config');
+const consultarPorId = require('../crud/consultaIdFunc');
 const jwt = require('jsonwebtoken');
 
 const validarLogin = async (id, pass) => {
@@ -28,10 +28,10 @@ const validarLogin = async (id, pass) => {
                 // Generar el token JWT
                 const token = jwt.sign(
                     {
-                        id: resultado.rows[0].ID, 
-                        nombre: resultado.rows[0].NOMBRE, 
+                        id: resultado.rows[0].ID,
+                        nombre: resultado.rows[0].NOMBRE,
                         admin: resultado.rows[0].ADMIN,
-                        habilitado: resultado.rows[0].HABILITADO 
+                        habilitado: resultado.rows[0].HABILITADO
                     },
                     process.env.JWT_SECRET,
                     { expiresIn: process.env.JWT_EXPIRATION });

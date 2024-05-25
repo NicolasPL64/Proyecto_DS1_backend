@@ -1,9 +1,9 @@
 const express = require('express');
 const rutaCRUD = express.Router();
-const actualizarEnTabla = require('../funciones/actualizarFunc');
-const consultarPorId = require('../funciones/consultaIdFunc');
-const insertarEnTabla = require('../funciones/insertarFunc');
-const insertarReservaConCliente = require('../funciones/insertarReservaConCliente');
+const actualizarEnTabla = require('../funciones/crud/actualizarFunc');
+const consultarPorId = require('../funciones/crud/consultaIdFunc');
+const insertarEnTabla = require('../funciones/crud/insertarFunc');
+const insertarReservaConCliente = require('../funciones/crud/insertarReservaConCliente');
 
 rutaCRUD.post('/:tabla/insertar', async (req, res, next) => {
     let result
@@ -20,9 +20,9 @@ rutaCRUD.post('/:tabla/insertar', async (req, res, next) => {
     }
 });
 
-rutaCRUD.get('/:tabla/consultar', async (req, res, next) => {
+rutaCRUD.get('/:tabla/consultar/:id', async (req, res, next) => {
     const tabla = req.params.tabla.toUpperCase();
-    const id = req.body.id;
+    const id = req.params.id;
     try {
         const result = await consultarPorId(tabla, id);
         if (result === null) res.sendStatus(404);
