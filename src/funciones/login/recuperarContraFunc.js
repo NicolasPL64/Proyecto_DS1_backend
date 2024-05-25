@@ -1,7 +1,7 @@
 const consultarPorId = require('../crud/consultaIdFunc');
 const insertarEnTabla = require('../crud/insertarFunc');
 const { deshabilitarCodsRecuperacion } = require('./loginFunc');
-const ErrorStatus = require('../../utilidades/errorStatus');
+const ErrorStatus = require('../../utilidades/ErrorStatus');
 const pool = require('../../configs/db.config');
 const transporter = require('../../configs/nmail.config');
 

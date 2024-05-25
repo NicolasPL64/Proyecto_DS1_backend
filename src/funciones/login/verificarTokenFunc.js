@@ -1,4 +1,4 @@
-const ErrorStatus = require('../../utilidades/errorStatus');
+const ErrorStatus = require('../../utilidades/ErrorStatus');
 
 function verificarToken(req, res, next) {
     if (!req.cookies.jwt) throw new ErrorStatus('No se proporcionó ningún token.', 401);

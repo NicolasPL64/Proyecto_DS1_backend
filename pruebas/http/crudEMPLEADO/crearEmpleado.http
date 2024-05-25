@@ -1,12 +1,11 @@
-// Archivo crearReserva.http
 POST http://localhost:3000/api/empleado/insertar HTTP/1.1
 Content-Type: application/json
 
 {
-    "id": "1129",
-    "contrasenia": "password",
+    "id": "999",
+    "contrasenia": "deshabilitado",
     "correo": "nixter646464@gmail.com",
-    "nombre": "Nicolás Prado",
+    "nombre": "Deshabilitado Perez",
     "fecha_nacimiento": "2004-02-10",
     "direccion": "Calle Esternocleidomastoideo",
     "salario": 1000,
