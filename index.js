@@ -15,9 +15,8 @@ app.use('/api', rutaCRUD);
 // Manejo de errores global
 app.use(function (err, req, res, next) {
     if (err.statusCode) res.status(err.statusCode).send(err.message);
-    else res.sendStatus(500);
-    console.error(err.stack); // Imprime el error en la consola
-    console.log("Error capturado por Express, probablemente fue culpa de Petro.")
+    else res.status(500).send("Ha ocurrido un error inesperado.");
+    console.error(err.stack);
 });
 
 app.listen(PORT, () => {

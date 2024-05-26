@@ -4,6 +4,7 @@ const actualizarEnTabla = require('../funciones/crud/actualizarFunc');
 const consultarPorId = require('../funciones/crud/consultaIdFunc');
 const insertarEnTabla = require('../funciones/crud/insertarFunc');
 const insertarReservaConCliente = require('../funciones/crud/insertarReservaConCliente');
+const ErrorStatus = require('../utilidades/ErrorStatus');
 
 rutaCRUD.post('/:tabla/insertar', async (req, res, next) => {
     let result
@@ -32,13 +33,14 @@ rutaCRUD.get('/:tabla/consultar/:id', async (req, res, next) => {
     }
 });
 
-rutaCRUD.put('/:tabla/actualizar', async (req, res) => {
+rutaCRUD.put('/:tabla/actualizar', async (req, res, next) => {
     const tabla = req.params.tabla.toUpperCase();
     const columnas = Object.keys(req.body).map(key => key.toUpperCase());
     const valores = Object.values(req.body);
     try {
         const result = await actualizarEnTabla(tabla, columnas, valores);
-        res.json(result);
+        if (result.rowCount > 0) res.sendStatus(200);
+        else throw new ErrorStatus("No se encontró el registro a actualizar.", 404);
     } catch (error) {
         next(error);
     }

@@ -9,7 +9,7 @@ const actualizarEnTabla = async (tabla, columnas, valores) => {
 
     const result = await ejecutarConsulta(consultaActualizacion, valores);
     console.log(`${tabla} actualizado:`, result.rows);
-    return result.rows;
+    return result;
 };
 
 module.exports = actualizarEnTabla;

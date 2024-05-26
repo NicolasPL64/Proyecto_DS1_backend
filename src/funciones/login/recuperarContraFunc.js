@@ -29,14 +29,16 @@ async function recuperarContrasenia(id) {
     };
 
     console.log('Credentials obtained, sending message to ' + mensaje.to);
-    transporter.sendMail(mensaje, (err, info) => {
-        if (err) {
-            console.log('Error occurred. ' + err.message);
-            return { codigoEstado: 500, correo: infoEmpleado.rows[0].CORREO };
-        }
-        insertarEnTabla('NODEMAILER', ['CODIGO', 'ID'], [passTemporal, id]);
-        console.log('Message sent: %s', info.messageId);
-        return { codigoEstado: 200, correo: infoEmpleado.rows[0].CORREO };
+    return new Promise((resolve, reject) => {
+        transporter.sendMail(mensaje, async (err, info) => {
+            if (err) {
+                console.log('Error occurred. ' + err.message);
+                resolve({ codigoEstado: 500, correo: infoEmpleado.rows[0].CORREO });
+            }
+            await insertarEnTabla('NODEMAILER', ['CODIGO', 'ID'], [passTemporal, id]);
+            console.log('Message sent: %s', info.messageId);
+            resolve({ codigoEstado: 200, correo: infoEmpleado.rows[0].CORREO });
+        })
     });
 }
 

@@ -2,7 +2,7 @@ PUT http://localhost:3000/api/reserva/actualizar HTTP/1.1
 Content-Type: application/json
 
 {
-    "id": "56",
+    "id": "66",
     "estado": "SUSESFUL",
     "f_entrada": "2024-05-20",
     "f_salida": "2024-05-23",

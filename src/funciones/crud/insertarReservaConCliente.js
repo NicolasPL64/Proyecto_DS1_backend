@@ -1,21 +1,29 @@
 const consultarPorId = require('./consultaIdFunc');
 const insertarEnTabla = require('./insertarFunc');
-const ErrorStatus = require('../../utilidades/errorStatus');
+const ErrorStatus = require('../../utilidades/ErrorStatus');
 const pool = require('../../configs/db.config');
 
 async function insertarReservaConCliente(req) {
+    const habitacion = await consultarPorId('HABITACION', req.body.reserva.id_Habitacion);
+    if (habitacion.rows[0].HABILITADO == false)
+        throw new ErrorStatus('La habitación está deshabilitada.', 409);
+
     if (await comprobarCruces(req.body.reserva.f_entrada, req.body.reserva.f_salida, req.body.reserva.id_Habitacion))
         throw new ErrorStatus('Ya existe una reserva en esas fechas.', 409);
 
-    // Comprueba si el cliente ya existe en la base de datos
-    if (await consultarPorId('CLIENTE', req.body.cliente.id) == null) {
-        const columnasCliente = Object.keys(req.body.cliente).map(key => key.toUpperCase());
-        const valoresCliente = Object.values(req.body.cliente);
-        await insertarEnTabla('CLIENTE', columnasCliente, valoresCliente);
+    const columnasCliente = Object.keys(req.body.cliente).map(key => key.toUpperCase());
+    const valoresCliente = Object.values(req.body.cliente);
+    await insertarEnTabla('CLIENTE', columnasCliente, valoresCliente);
+
+    try {
+        const columnasReserva = Object.keys(req.body.reserva).map(key => key.toUpperCase());
+        const valoresReserva = Object.values(req.body.reserva);
+        await insertarEnTabla('RESERVA', columnasReserva, valoresReserva);
+    } catch (error) {
+        if (error.code == 23503)
+            throw new ErrorStatus('No existe la habitación.', 404);
+        next(error);
     }
-    const columnasReserva = Object.keys(req.body.reserva).map(key => key.toUpperCase());
-    const valoresReserva = Object.values(req.body.reserva);
-    await insertarEnTabla('RESERVA', columnasReserva, valoresReserva);
 }
 
 async function comprobarCruces(fechaEntrada, fechaSalida, idHabitacion) {

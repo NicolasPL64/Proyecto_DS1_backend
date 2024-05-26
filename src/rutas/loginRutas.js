@@ -47,7 +47,7 @@ rutaLogin.post('/recuperarContra', async (req, res, next) => {
     }
 });
 
-rutaLogin.post('/cambiarContra', async (req, res, next) => {
+rutaLogin.put('/cambiarContra', async (req, res, next) => {
     const { id, passNuevo } = req.body;
     try {
         await actualizarEnTabla('EMPLEADO', ['ID', 'CONTRASENIA'], [id, passNuevo]);
