@@ -1,9 +1,8 @@
-// Archivo crearReserva.http
-POST http://localhost:3000/api/empleaddo/actualizar HTTP/1.1
+PUT http://localhost:3000/api/empleado/actualizar HTTP/1.1
 Content-Type: application/json
 
 {
-    "id": "6464",
+    "id": "999",
     "contrasenia": "ñBRUTAL",
     "correo": "ñpopeye@example.lol",
     "nombre": "ñPop Eye",

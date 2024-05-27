@@ -27,10 +27,9 @@ rutaLogin.post('/', async (req, res, next) => {
         res.cookie('jwt', validacion.token, cookieOptions);
         res.status(validacion.codigoEstado)
             .json({
-                existe: validacion.existeUsuario,
-                correcto: validacion.passCorrecto,
-                recuperacion: validacion.modoRecuperacion,
-                admin: validacion.modoAdmin
+                correcto: validacion.todoCorrecto,
+                modo_Recuperacion: validacion.modoRecuperacion,
+                modo_Admin: validacion.modoAdmin
             });
     } catch (error) {
         next(error);

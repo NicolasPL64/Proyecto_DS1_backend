@@ -6,18 +6,17 @@ const jwt = require('jsonwebtoken');
 const validarLogin = async (id, pass) => {
     const resultado = await consultarPorId('EMPLEADO', id);
     let jsonReturn = {
-        existeUsuario: false,
-        passCorrecto: false,
-        codigoEstado: 200,
+        todoCorrecto: false,
         modoRecuperacion: false,
         modoAdmin: false,
+        codigoEstado: 200,
         token: null
     };
 
     if (resultado != null) {
         if (resultado.rows[0].HABILITADO === false) {
             console.log('Usuario inhabilitado');
-            throw new ErrorStatus('Usuario inhabilitado', 401);
+            throw new ErrorStatus('Usuario inhabilitado.', 401);
         }
 
         const resultadoNodemailer = await pool.query(
@@ -42,18 +41,18 @@ const validarLogin = async (id, pass) => {
                 { expiresIn: process.env.JWT_EXPIRATION });
 
             deshabilitarCodsRecuperacion(id);
-            return Object.assign(jsonReturn, { existeUsuario: true, passCorrecto: true, token: token });;
+            return Object.assign(jsonReturn, { todoCorrecto: true, token: token });;
         } else if (resultadoNodemailer.rowCount > 0) {
             console.log('Contraseña temporal correcta');
             deshabilitarCodsRecuperacion(id);
-            return Object.assign(jsonReturn, { existeUsuario: true, passCorrecto: true, modoRecuperacion: true });;
+            return Object.assign(jsonReturn, { todoCorrecto: true, modoRecuperacion: true });;
         } else {
             console.log('Contraseña incorrecta');
-            return Object.assign(jsonReturn, { existeUsuario: true, codigoEstado: 401 });
+            throw new ErrorStatus('Contraseña incorrecta.', 401);
         }
     } else {
         console.log('Usuario no encontrado');
-        return Object.assign(jsonReturn, { codigoEstado: 401 });;
+        throw new ErrorStatus('Usuario no encontrado.', 401);
     }
 };
 
@@ -64,7 +63,7 @@ async function deshabilitarCodsRecuperacion(id) {
                 WHERE "ID" = $1`, [id]);
     } catch (error) {
         console.error('Error al deshabilitar códigos de recuperación.');
-        throw error;
+        throw new ErrorStatus('Error al deshabilitar códigos de recuperación.', 500);
     }
 }
 
