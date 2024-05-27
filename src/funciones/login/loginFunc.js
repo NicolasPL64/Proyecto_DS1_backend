@@ -26,26 +26,24 @@ const validarLogin = async (id, pass) => {
 
         if (resultado.rows[0].ADMIN === true) jsonReturn.modoAdmin = true;
 
+        const token = jwt.sign(
+            {
+                id: resultado.rows[0].ID,
+                nombre: resultado.rows[0].NOMBRE,
+                admin: resultado.rows[0].ADMIN,
+                habilitado: resultado.rows[0].HABILITADO
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRATION });
+
         if (resultado.rows[0].CONTRASENIA === pass) {
             console.log('Contraseña correcta');
-
-            // Generar el token JWT
-            const token = jwt.sign(
-                {
-                    id: resultado.rows[0].ID,
-                    nombre: resultado.rows[0].NOMBRE,
-                    admin: resultado.rows[0].ADMIN,
-                    habilitado: resultado.rows[0].HABILITADO
-                },
-                process.env.JWT_SECRET,
-                { expiresIn: process.env.JWT_EXPIRATION });
-
             deshabilitarCodsRecuperacion(id);
             return Object.assign(jsonReturn, { todoCorrecto: true, token: token });;
         } else if (resultadoNodemailer.rowCount > 0) {
             console.log('Contraseña temporal correcta');
             deshabilitarCodsRecuperacion(id);
-            return Object.assign(jsonReturn, { todoCorrecto: true, modoRecuperacion: true });;
+            return Object.assign(jsonReturn, { todoCorrecto: true, modoRecuperacion: true, token: token });;
         } else {
             console.log('Contraseña incorrecta');
             throw new ErrorStatus('Contraseña incorrecta.', 401);
