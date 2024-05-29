@@ -3,23 +3,8 @@ const rutaLogin = express.Router();
 const { validarLogin } = require('../funciones/loginFunc');
 const recuperarContrasenia = require('../funciones/recuperarContraFunc');
 const actualizarEnTabla = require('../funciones/actualizarFunc');
+const verificarToken = require('../Middleware/verificarToken');
 const jwt = require('jsonwebtoken');
-
-
-function verificarToken(req, res, next) {
-    const token = req.cookies.jwt;
-    if (!token) {
-        return res.status(401).json({ mensaje: 'No se proporcionó ningún token' });
-    }
-
-    try {
-        const datos = JsonWebToken.verify(token, process.env.JWT_SECRET);
-        req.usuario = datos;
-        next();
-    } catch (error) {
-        return res.status(401).json({ mensaje: 'Token inválido' });
-    }
-}
 
 rutaLogin.post('/', async (req, res, next) => {
     const { id, pass } = req.body;
@@ -50,9 +35,7 @@ rutaLogin.post('/', async (req, res, next) => {
     }
 });
 
-rutaLogin.use(verificarToken);
-
-rutaLogin.post('/recuperarContra', async (req, res, next) => {
+rutaLogin.post('/recuperarContra', verificarToken ,async (req, res, next) => {
     try {
         const validacion = await recuperarContrasenia(req.body.id);
         res.status(validacion.codigoEstado)
@@ -63,7 +46,7 @@ rutaLogin.post('/recuperarContra', async (req, res, next) => {
 
 });
 
-rutaLogin.post('/cambiarContra', async (req, res, next) => {
+rutaLogin.post('/cambiarContra', verificarToken ,async (req, res, next) => {
     const { id, passNuevo } = req.body;
     try {
         await actualizarEnTabla('EMPLEADO', ['ID', 'CONTRASENIA'], [id, passNuevo]);

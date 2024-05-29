@@ -4,8 +4,9 @@ const actualizarEnTabla = require('../funciones/actualizarFunc');
 const consultarPorId = require('../funciones/consultaIdFunc');
 const insertarEnTabla = require('../funciones/insertarFunc');
 const insertarReservaConCliente = require('../funciones/insertarReservaConCliente');
+const verificarToken = require('../Middleware/verificarToken');
 
-rutaCRUD.post('/:tabla/insertar', async (req, res, next) => {
+rutaCRUD.post('/:tabla/insertar', verificarToken ,async (req, res, next) => {
     let result
     try {
         if (req.params.tabla != 'reserva') {
@@ -20,7 +21,7 @@ rutaCRUD.post('/:tabla/insertar', async (req, res, next) => {
     }
 });
 
-rutaCRUD.get('/:tabla/consultar', async (req, res, next) => {
+rutaCRUD.get('/:tabla/consultar', verificarToken ,async (req, res, next) => {
     const tabla = req.params.tabla.toUpperCase();
     const id = req.body.id;
     try {
@@ -32,7 +33,7 @@ rutaCRUD.get('/:tabla/consultar', async (req, res, next) => {
     }
 });
 
-rutaCRUD.put('/:tabla/actualizar', async (req, res) => {
+rutaCRUD.put('/:tabla/actualizar', verificarToken ,async (req, res) => {
     const tabla = req.params.tabla.toUpperCase();
     const columnas = Object.keys(req.body).map(key => key.toUpperCase());
     const valores = Object.values(req.body);
