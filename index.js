@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const rutaLogin = require('./src/rutas/loginRutas');
 const rutaCRUD = require('./src/rutas/crudRutas');
@@ -8,6 +9,7 @@ const PORT = process.env.PORT;
 
 app.use(cors()); // Habilitar CORS para todas las rutas
 app.use(express.json()); // Habilitar el uso de JSON en las peticiones
+app.use(cookieParser());
 
 app.use('/api/login', rutaLogin);
 app.use('/api', rutaCRUD);
@@ -20,5 +22,5 @@ app.use(function (err, req, res, next) {
 });
 
 app.listen(PORT, () => {
-    console.log(`--------> Backend parando bolas en http://localhost:${PORT} <--------`);
+    console.log(`--------> Backend corriendo en http://localhost:${PORT} <--------`);
 });

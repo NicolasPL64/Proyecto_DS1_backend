@@ -3,7 +3,7 @@ const rutaLogin = express.Router();
 const { validarLogin } = require('../funciones/login/loginFunc');
 const recuperarContrasenia = require('../funciones/login/recuperarContraFunc');
 const actualizarEnTabla = require('../funciones/crud/actualizarFunc');
-const verificarToken = require('../funciones/login/verificarTokenFunc');
+const verificarToken = require('../Middleware/verificarToken');
 const jwt = require('jsonwebtoken');
 
 
@@ -36,7 +36,7 @@ rutaLogin.post('/', async (req, res, next) => {
     }
 });
 
-rutaLogin.post('/recuperarContra', async (req, res, next) => {
+rutaLogin.post('/recuperarContra', verificarToken, async (req, res, next) => {
     try {
         const validacion = await recuperarContrasenia(req.body.id);
         res.status(validacion.codigoEstado)
@@ -46,7 +46,7 @@ rutaLogin.post('/recuperarContra', async (req, res, next) => {
     }
 });
 
-rutaLogin.put('/cambiarContra', async (req, res, next) => {
+rutaLogin.put('/cambiarContra', verificarToken, async (req, res, next) => {
     const { id, passNuevo } = req.body;
     try {
         await actualizarEnTabla('EMPLEADO', ['ID', 'CONTRASENIA'], [id, passNuevo]);
