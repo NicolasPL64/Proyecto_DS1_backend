@@ -4,7 +4,7 @@ const actualizarEnTabla = require('../funciones/crud/actualizarFunc');
 const consultarPorId = require('../funciones/crud/consultaIdFunc');
 const insertarEnTabla = require('../funciones/crud/insertarFunc');
 const insertarReservaConCliente = require('../funciones/crud/insertarReservaConCliente');
-const verificarToken = require('../Middleware/verificarToken');
+const verificarToken = require('../middleware/verificarToken');
 const ErrorStatus = require('../utilidades/ErrorStatus');
 
 rutaCRUD.post('/:tabla/insertar', verificarToken, async (req, res, next) => {
@@ -27,14 +27,14 @@ rutaCRUD.get('/:tabla/consultar/:id', verificarToken, async (req, res, next) => 
     const id = req.params.id;
     try {
         const result = await consultarPorId(tabla, id);
-        if (result === null) res.sendStatus(404);
+        if (result === null) throw new ErrorStatus(`No se encontró el registro con ID ${id}.`, 404);
         else res.json(result);
     } catch (error) {
         next(error);
     }
 });
 
-rutaCRUD.put('/:tabla/actualizar', verificarToken, async (req, res) => {
+rutaCRUD.put('/:tabla/actualizar', verificarToken, async (req, res, next) => {
     const tabla = req.params.tabla.toUpperCase();
     const columnas = Object.keys(req.body).map(key => key.toUpperCase());
     const valores = Object.values(req.body);

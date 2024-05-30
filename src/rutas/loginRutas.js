@@ -3,7 +3,7 @@ const rutaLogin = express.Router();
 const { validarLogin } = require('../funciones/login/loginFunc');
 const recuperarContrasenia = require('../funciones/login/recuperarContraFunc');
 const actualizarEnTabla = require('../funciones/crud/actualizarFunc');
-const verificarToken = require('../Middleware/verificarToken');
+const verificarToken = require('../middleware/verificarToken');
 const jwt = require('jsonwebtoken');
 
 
@@ -14,22 +14,20 @@ rutaLogin.post('/', async (req, res, next) => {
         const validacion = await validarLogin(id, pass);
         console.log("Token:", validacion.token);
 
-        // Decodificar el token y imprimir los datos
         const decodedToken = jwt.decode(validacion.token);
         console.log("Datos del token: ", decodedToken);
 
-        // Configurar las opciones de la cookie
         const cookieOptions = {
             expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000),
-            httpOnly: true,
-            path: "/"
+            // path: "/"
         };
-        res.cookie('jwt', validacion.token, cookieOptions);
-        res.status(validacion.codigoEstado)
+        res.cookie('token', validacion.token, cookieOptions);
+        res.status(200)
             .json({
                 correcto: validacion.todoCorrecto,
                 modo_Recuperacion: validacion.modoRecuperacion,
-                modo_Admin: validacion.modoAdmin
+                modo_Admin: validacion.modoAdmin,
+                token: validacion.token
             });
     } catch (error) {
         next(error);

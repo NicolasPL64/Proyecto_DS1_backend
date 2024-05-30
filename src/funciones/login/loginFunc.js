@@ -9,7 +9,6 @@ const validarLogin = async (id, pass) => {
         todoCorrecto: false,
         modoRecuperacion: false,
         modoAdmin: false,
-        codigoEstado: 200,
         token: null
     };
 

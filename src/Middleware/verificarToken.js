@@ -1,20 +1,17 @@
 const jwt = require('jsonwebtoken');
+const ErrorStatus = require('../utilidades/ErrorStatus');
 
 function verificarToken(req, res, next) {
-    const bearerHeader = req.headers['authorization'];
-    if (!bearerHeader) {
-        return res.status(401).json({ mensaje: 'Inicia sesion' });
+    const { token } = req.cookies;
+    if (!token) {
+        throw new ErrorStatus('Inicia sesión.', 401);
     }
-
-    const bearer = bearerHeader.split(' ');
-    const token = bearer[1];
-
     try {
         const datos = jwt.verify(token, process.env.JWT_SECRET);
         req.usuario = datos;
         next();
     } catch (error) {
-        return res.status(401).json({ mensaje: 'Token inválido' });
+        throw new ErrorStatus('Token inválido.', 401);
     }
 }
 

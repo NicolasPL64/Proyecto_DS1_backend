@@ -7,7 +7,7 @@ const rutaCRUD = require('./src/rutas/crudRutas');
 const app = express();
 const PORT = process.env.PORT;
 
-app.use(cors()); // Habilitar CORS para todas las rutas
+app.use(cors({ origin: 'http://localhost:5173', credentials: true })); // Habilitar CORS para todas las rutas
 app.use(express.json()); // Habilitar el uso de JSON en las peticiones
 app.use(cookieParser());
 
