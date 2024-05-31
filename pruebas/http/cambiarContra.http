@@ -2,6 +2,5 @@ PUT http://localhost:3000/api/login/cambiarContra HTTP/1.1
 Content-Type: application/json
 
 {
-    "id": 1129,
-    "passNuevo": "Mister_n1ggers"
+    "passNuevo": "Juanes123"
 }

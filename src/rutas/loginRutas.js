@@ -4,6 +4,7 @@ const { validarLogin } = require('../funciones/login/loginFunc');
 const recuperarContrasenia = require('../funciones/login/recuperarContraFunc');
 const actualizarEnTabla = require('../funciones/crud/actualizarFunc');
 const verificarToken = require('../middleware/verificarToken');
+const ErrorStatus = require('../utilidades/ErrorStatus');
 const jwt = require('jsonwebtoken');
 
 
@@ -34,7 +35,7 @@ rutaLogin.post('/', async (req, res, next) => {
     }
 });
 
-rutaLogin.post('/recuperarContra', verificarToken, async (req, res, next) => {
+rutaLogin.post('/recuperarContra', async (req, res, next) => {
     try {
         const validacion = await recuperarContrasenia(req.body.id);
         res.status(validacion.codigoEstado)
@@ -45,10 +46,13 @@ rutaLogin.post('/recuperarContra', verificarToken, async (req, res, next) => {
 });
 
 rutaLogin.put('/cambiarContra', verificarToken, async (req, res, next) => {
-    const { id, passNuevo } = req.body;
+    const { id, recuperacion } = req.usuario;
+    const { passNuevo } = req.body;
     try {
+        if (!recuperacion) throw new ErrorStatus('No tienes permiso para cambiar la contraseña.', 401)
+
         await actualizarEnTabla('EMPLEADO', ['ID', 'CONTRASENIA'], [id, passNuevo]);
-        res.sendStatus(200);
+        res.clearCookie('token').sendStatus(200);
     } catch (error) {
         next(error);
     }
