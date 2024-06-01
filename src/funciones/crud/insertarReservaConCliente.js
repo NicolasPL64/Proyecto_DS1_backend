@@ -22,7 +22,7 @@ async function insertarReservaConCliente(req) {
     } catch (error) {
         if (error.code == 23503)
             throw new ErrorStatus('No existe la habitación.', 404);
-        next(error);
+        throw error;
     }
 }
 

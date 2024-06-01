@@ -4,7 +4,7 @@ const ErrorStatus = require('../utilidades/ErrorStatus');
 function verificarToken(req, res, next) {
     const { token } = req.cookies;
     if (!token) {
-        throw new ErrorStatus('Inicia sesión.', 401);
+        throw new ErrorStatus('No tienes permiso para realizar esta acción.', 401);
     }
     try {
         const datos = jwt.verify(token, process.env.JWT_SECRET);
