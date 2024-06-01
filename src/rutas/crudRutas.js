@@ -16,7 +16,7 @@ rutaCRUD.post('/:tabla/insertar', verificarToken, async (req, res, next) => {
             const valores = Object.values(req.body);
             result = await insertarEnTabla(tabla, columnas, valores);
         } else result = await insertarReservaConCliente(req);
-        res.sendStatus(200);
+        res.status(200).json({ id: result[0].ID });
     } catch (error) {
         next(error);
     }

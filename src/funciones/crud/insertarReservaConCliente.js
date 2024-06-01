@@ -5,7 +5,7 @@ const pool = require('../../configs/db.config');
 
 async function insertarReservaConCliente(req) {
     const habitacion = await consultarPorId('HABITACION', req.body.reserva.id_Habitacion);
-    if (habitacion.rows[0].HABILITADO == false)
+    if (habitacion && habitacion.rows[0].HABILITADO == false)
         throw new ErrorStatus('La habitación está deshabilitada.', 409);
 
     if (await comprobarCruces(req.body.reserva.f_entrada, req.body.reserva.f_salida, req.body.reserva.id_Habitacion))
@@ -18,7 +18,7 @@ async function insertarReservaConCliente(req) {
     try {
         const columnasReserva = Object.keys(req.body.reserva).map(key => key.toUpperCase());
         const valoresReserva = Object.values(req.body.reserva);
-        await insertarEnTabla('RESERVA', columnasReserva, valoresReserva);
+        return await insertarEnTabla('RESERVA', columnasReserva, valoresReserva);
     } catch (error) {
         if (error.code == 23503)
             throw new ErrorStatus('No existe la habitación.', 404);
