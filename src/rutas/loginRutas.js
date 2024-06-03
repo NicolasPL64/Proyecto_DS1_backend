@@ -58,6 +58,4 @@ rutaLogin.put('/cambiarContra', verificarToken, async (req, res, next) => {
     }
 });
 
-rutaLogin.use(verificarToken);
-
 module.exports = rutaLogin;
