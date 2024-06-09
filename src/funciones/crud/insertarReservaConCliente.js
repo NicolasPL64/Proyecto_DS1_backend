@@ -18,6 +18,8 @@ async function insertarReservaConCliente(req) {
     try {
         const columnasReserva = Object.keys(req.body.reserva).map(key => key.toUpperCase());
         const valoresReserva = Object.values(req.body.reserva);
+        columnasReserva.push('ID_EMPLEADO');
+        valoresReserva.push(req.usuario.id);
         return await insertarEnTabla('RESERVA', columnasReserva, valoresReserva);
     } catch (error) {
         if (error.code == 23503)
