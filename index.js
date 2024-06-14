@@ -21,6 +21,10 @@ app.use(function (err, req, res, next) {
     console.error(err.stack);
 });
 
+app.post('/api/logout', (req, res) => {
+    res.clearCookie('token').send();
+});
+
 app.listen(PORT, () => {
     console.log(`--------> Backend parando bolas en http://localhost:${PORT} <--------`);
 });
