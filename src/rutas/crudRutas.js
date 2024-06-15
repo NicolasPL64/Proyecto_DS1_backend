@@ -32,7 +32,7 @@ rutaCRUD.get('/:tabla/consultar/:id', verificarAdmin, async (req, res, next) => 
     try {
         const result = await consultarPorId(tabla, id);
         if (result === null) throw new ErrorStatus(`No se encontró el registro con ID ${id}.`, 404);
-        else res.json(result);
+        res.json(result);
     } catch (error) {
         next(error);
     }
