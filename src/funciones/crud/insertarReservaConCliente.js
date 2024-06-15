@@ -1,7 +1,7 @@
 const consultarPorId = require('./consultaIdFunc');
 const insertarEnTabla = require('./insertarFunc');
+const comprobarCruces = require('./comprobarCrucesFunc');
 const ErrorStatus = require('../../utilidades/ErrorStatus');
-const pool = require('../../configs/db.config');
 
 async function insertarReservaConCliente(req) {
     const habitacion = await consultarPorId('HABITACION', req.body.reserva.id_Habitacion);
@@ -26,15 +26,6 @@ async function insertarReservaConCliente(req) {
             throw new ErrorStatus('No existe la habitación.', 404);
         throw error;
     }
-}
-
-async function comprobarCruces(fechaEntrada, fechaSalida, idHabitacion) {
-    const result = await pool.query(`SELECT * 
-                                    FROM public."RESERVA" 
-                                    WHERE (("F_ENTRADA" BETWEEN $1 AND $2) OR ("F_SALIDA" BETWEEN $3 AND $4))
-                                        AND "ID_HABITACION" = $5 AND "HABILITADO" = true`,
-        [fechaEntrada, fechaSalida, fechaEntrada, fechaSalida, idHabitacion]);
-    return result.rowCount > 0;
 }
 
 module.exports = insertarReservaConCliente;

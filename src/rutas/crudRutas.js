@@ -6,6 +6,7 @@ const insertarEnTabla = require('../funciones/crud/insertarFunc');
 const insertarReservaConCliente = require('../funciones/crud/insertarReservaConCliente');
 const verificarToken = require('../middleware/verificarToken');
 const verificarAdmin = require('../middleware/verificarAdmin');
+const comprobarCruces = require('../funciones/crud/comprobarCrucesFunc');
 const ErrorStatus = require('../utilidades/ErrorStatus');
 
 rutaCRUD.use(verificarToken);
@@ -38,10 +39,15 @@ rutaCRUD.get('/:tabla/consultar/:id', verificarAdmin, async (req, res, next) => 
 });
 
 rutaCRUD.put('/:tabla/actualizar', verificarAdmin, async (req, res, next) => {
-    const tabla = req.params.tabla.toUpperCase();
-    const columnas = Object.keys(req.body).map(key => key.toUpperCase());
-    const valores = Object.values(req.body);
     try {
+        const tabla = req.params.tabla.toUpperCase();
+        if (tabla == 'RESERVA' && await comprobarCruces(req.body.f_entrada, req.body.f_salida,
+            req.body.id_Habitacion, req.body.id))
+            throw new ErrorStatus('Ya existe una reserva en esas fechas.', 409);
+
+        const columnas = Object.keys(req.body).map(key => key.toUpperCase());
+        const valores = Object.values(req.body);
+
         const result = await actualizarEnTabla(tabla, columnas, valores);
         if (result.rowCount > 0) res.sendStatus(200);
         else throw new ErrorStatus("No se encontró el registro a actualizar.", 404);
