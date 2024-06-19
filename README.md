@@ -17,3 +17,5 @@ JWT_SECRET = //
 JWT_EXPIRATION = 1d
 JWT_COOKIE_EXPIRES = 1
 ```
+## Estructura de la base de datos
+![Untitled](https://github.com/NicolasPL64/Proyecto_DS1_backend/assets/31411531/6f479ec0-c517-4b9d-bb28-cbc1cbf104e0)
