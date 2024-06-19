@@ -1,5 +1,6 @@
 const pool = require('../../configs/db.config');
 const consultarPorId = require('../crud/consultaIdFunc');
+const actualizarEnTabla = require('../crud/actualizarFunc');
 const ErrorStatus = require('../../utilidades/ErrorStatus');
 const jwt = require('jsonwebtoken');
 
@@ -47,9 +48,7 @@ const validarLogin = async (id, pass) => {
 
 async function deshabilitarCodsRecuperacion(id) {
     try {
-        await pool.query(`UPDATE public."NODEMAILER"
-                SET "USADO" = true
-                WHERE "ID" = $1`, [id]);
+        await actualizarEnTabla('NODEMAILER', ['ID', 'USADO'], [id, true]);
     } catch (error) {
         console.error('Error al deshabilitar códigos de recuperación.');
         throw new ErrorStatus('Error al deshabilitar códigos de recuperación.', 500);
